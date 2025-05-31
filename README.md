@@ -156,6 +156,7 @@ print(f"Predicted Output: y = {y_test_pred:.8f}")
 Training Loss Vs Iteration Plot
 
 ![alt text](image.png)
+
 Best Fit line plot
 
 ![alt text](image-2-1.png)
