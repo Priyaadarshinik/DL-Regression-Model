@@ -1,168 +1,276 @@
-# Developing a Neural Network Regression Model
+# Image-Handling-and-Pixel-Transformations-Using-OpenCV 
+## AIM:
+Write a Python program using OpenCV that performs the following tasks:
 
-## AIM
-To develop a neural network regression model for the given dataset.
+1) Read and Display an Image.  
+2) Adjust the brightness of an image.  
+3) Modify the image contrast.  
+4) Generate a third image using bitwise operations.
 
-## THEORY
-Regression problems involve predicting a continuous output variable based on input features. Traditional linear regression models often struggle with complex patterns in data. Neural networks, specifically feedforward neural networks, can capture these complex relationships by using multiple layers of neurons and activation functions. In this experiment, a neural network model is introduced with a single linear layer that learns the parameters weight and bias using gradient descent.
+## Software Required:
+- Anaconda - Python 3.7
+- Jupyter Notebook (for interactive development and execution)
 
-## Neural Network Model
-Include the neural network model diagram.
+## Algorithm:
+### Step 1:
+Load an image from your local directory and display it.
 
-## DESIGN STEPS
-### STEP 1: Generate Dataset
+### Step 2:
+Create a matrix of ones (with data type float64) to adjust brightness.
 
-Create input values  from 1 to 50 and add random noise to introduce variations in output values .
+### Step 3:
+Create brighter and darker images by adding and subtracting the matrix from the original image.  
+Display the original, brighter, and darker images.
 
-### STEP 2: Initialize the Neural Network Model
+### Step 4:
+Modify the image contrast by creating two higher contrast images using scaling factors of 1.1 and 1.2 (without overflow fix).  
+Display the original, lower contrast, and higher contrast images.
 
-Define a simple linear regression model using torch.nn.Linear() and initialize weights and bias values randomly.
+### Step 5:
+Split the image (boy.jpg) into B, G, R components and display the channels
 
-### STEP 3: Define Loss Function and Optimizer
+## Program Developed By:
+- **Name:** PRIYAADARSHINI K
+- **Register Number:** 212223240126
 
-Use Mean Squared Error (MSE) as the loss function and optimize using Stochastic Gradient Descent (SGD) with a learning rate of 0.001.
+  ### Ex. No. 01
 
-### STEP 4: Train the Model
-
-Run the training process for 100 epochs, compute loss, update weights and bias using backpropagation.
-
-### STEP 5: Plot the Loss Curve
-
-Track the loss function values across epochs to visualize convergence.
-
-### STEP 6: Visualize the Best-Fit Line
-
-Plot the original dataset along with the learned linear model.
-
-### STEP 7: Make Predictions
-
-Use the trained model to predict  for a new input value .
-
-## PROGRAM
-
-### Name: PRIYAADARSHINI K
-
-### Register Number: 212223240126
-
+#### 1. Read the image ('Eagle_in_Flight.jpg') using OpenCV imread() as a grayscale image.
 ```python
-# Importing libraries
-
-import torch as t
-import torch.nn as nn
+import cv2
+import numpy as np
 import matplotlib.pyplot as plt
-
-# DATA GENERATION
-t.manual_seed(71)
-X = t.linspace(1, 50, 50).reshape(-1, 1)
-noise = t.randint(-8, 9, (50, 1), dtype=t.float)
-y = 2 * X + 1 + noise
-
-# Dataset information
-plt.figure(figsize=(6, 4))
-plt.scatter(X.numpy(), y.numpy(), color='purple')
-plt.xlabel('X')
-plt.ylabel('y')
-plt.title('Generated Dataset (y = 2x + 1 + noise)')
-plt.tight_layout()
-plt.show()
-
-# Model definition
-
-class Model(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.linear = nn.Linear(1, 1)
-
-    def forward(self, x):
-        return self.linear(x)
-
-# Initialize model
-t.manual_seed(59)
-model = Model()
-
-# Print initial weight and bias
-print("=== Initial Model Parameters ===")
-print(f"Initial Weight: {model.linear.weight.item():.8f}")
-print(f"Initial Bias: {model.linear.bias.item():.8f}\n")
-
-
-# Loss function and optimizer
-
-loss_fn = nn.MSELoss()
-optimizer = t.optim.SGD(model.parameters(), lr=0.001)
-
-# Training loop
-
-losses = []
-
-for epoch in range(100):
-    optimizer.zero_grad()
-    y_pred = model(X)
-    loss = loss_fn(y_pred, y)
-    loss.backward()
-    optimizer.step()
-    losses.append(loss.item())
-
-# Training loss vs iteration plot
-
-plt.figure(figsize=(6, 4))
-plt.plot(range(100), losses, color='blue')
-plt.xlabel('Epochs')
-plt.ylabel('Loss')
-plt.title('Training Loss vs Iteration')
-plt.tight_layout()
-plt.show()
-
-# Final parameters
-
-final_weight = model.linear.weight.item()
-final_bias = model.linear.bias.item()
-print("=== Final Trained Parameters ===")
-print(f"Final Weight: {final_weight:.8f}")
-print(f"Final Bias: {final_bias:.8f}\n")
-
-# Best fit line plot
-
-x_line = t.tensor([[X.min().item()], [X.max().item()]])
-y_line = model(x_line).detach()
-
-plt.figure(figsize=(6, 4))
-plt.scatter(X.numpy(), y.numpy(), label='Data', color='purple')
-plt.plot(x_line.numpy(), y_line.numpy(), color='red', label='Best Fit Line')
-plt.xlabel('X')
-plt.ylabel('y')
-plt.title('Best Fit Line (Trained Model)')
-plt.legend()
-plt.tight_layout() 
-plt.show()
-
-# New sample data prediction
-
-x_test = t.tensor([[120.0]])
-y_test_pred = model(x_test).item()
-print("=== New Sample Data Prediction ===")
-print(f"Input: x = 120")
-print(f"Predicted Output: y = {y_test_pred:.8f}")
-
-
-# Initialize the Model, Loss Function, and Optimizer
-
+img =cv2.imread('Eagle_in_Flight.jpg',cv2.IMREAD_COLOR)
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 ```
 
-### Dataset Information
-![alt text](image-3-1.png)
+#### 2. Print the image width, height & Channel.
+```python
+img.shape
+```
 
-### OUTPUT
-Training Loss Vs Iteration Plot
+#### 3. Display the image using matplotlib imshow().
+```python
+img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2GRAY)
+plt.imshow(img_gray,cmap='grey')
+plt.show()
+```
 
-![alt text](image.png)
+#### 4. Save the image as a PNG file using OpenCV imwrite().
+```python
+img=cv2.imread('Eagle_in_Flight.jpg')
+cv2.imwrite('Eagle.png',img)
+```
 
-Best Fit line plot
+#### 5. Read the saved image above as a color image using cv2.cvtColor().
+```python
+img=cv2.imread('Eagle.png')
+img_rgb = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+```
 
-![alt text](image-2-1.png)
+#### 6. Display the Colour image using matplotlib imshow() & Print the image width, height & channel.
+```python
+plt.imshow(img)
+plt.show()
+img.shape
+```
 
-### New Sample Data Prediction
-![alt text](image-1.png)
+#### 7. Crop the image to extract any specific (Eagle alone) object from the image.
+```python
+cr = img_rgb[200:400,200:400] 
+plt.imshow(cr)
+plt.title("Cropped Region")
+plt.axis("off")
+plt.show()
+cr.shape
+```
 
-## RESULT
-Thus, a neural network regression model was successfully developed and trained using PyTorch.
+#### 8. Resize the image up by a factor of 2x.
+```python
+res= cv2.resize(cr,(200*2, 200*2))
+```
+
+#### 9. Flip the cropped/resized image horizontally.
+```python
+flip= cv2.flip(res,1)
+plt.imshow(flip)
+plt.title("Flipped Horizontally")
+plt.axis("off")
+```
+
+#### 10. Read in the image ('Apollo-11-launch.jpg').
+```python
+img=cv2.imread('Apollo-11-launch.jpg',cv2.IMREAD_COLOR)
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+img_rgb.shape
+```
+
+#### 11. Add the following text to the dark area at the bottom of the image (centered on the image):
+```python
+text = cv2.putText(img_rgb, "Apollo 11 Saturn V Launch, July 16, 1969", (300, 700),cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)  
+plt.imshow(text, cmap='gray')  
+plt.title("New image")
+plt.show()  
+```
+
+#### 12. Draw a magenta rectangle that encompasses the launch tower and the rocket.
+```python
+rcol= (255, 0, 255)
+cv2.rectangle(img_rgb, (400, 100), (800, 650), rcol, 3)  
+```
+
+#### 13. Display the final annotated image.
+```python
+plt.title("Annotated image")
+plt.imshow(img_rgb)
+plt.show()
+```
+
+#### 14. Read the image ('Boy.jpg').
+```python
+img =cv2.imread('boy.jpg',cv2.IMREAD_COLOR)
+img_rgb= cv2.cvtColor(img, cv2.COLOR_BGR2RGB) 
+```
+
+#### 15. Adjust the brightness of the image.
+```python
+m = np.ones(img_rgb.shape, dtype="uint8") * 50
+```
+
+#### 16. Create brighter and darker images.
+```python
+img_brighter = cv2.add(img_rgb, m)  
+img_darker = cv2.subtract(img_rgb, m)  
+```
+
+#### 17. Display the images (Original Image, Darker Image, Brighter Image).
+```python
+plt.figure(figsize=(10,5))
+plt.subplot(1,3,1), plt.imshow(img_rgb), plt.title("Original Image"), plt.axis("off")
+plt.subplot(1,3,2), plt.imshow(img_brighter), plt.title("Brighter Image"), plt.axis("off")
+plt.subplot(1,3,3), plt.imshow(img_darker), plt.title("Darker Image"), plt.axis("off")
+plt.show()
+```
+
+#### 18. Modify the image contrast.
+```python
+matrix1 = np.ones(img_rgb.shape, dtype="float32") * 1.1
+matrix2 = np.ones(img_rgb.shape, dtype="float32") * 1.2
+img_higher1 = cv2.multiply(img.astype("float32"), matrix1).clip(0,255).astype("uint8")
+img_higher2 = cv2.multiply(img.astype("float32"), matrix2).clip(0,255).astype("uint8")
+```
+
+#### 19. Display the images (Original, Lower Contrast, Higher Contrast).
+```python
+plt.figure(figsize=(10,5))
+plt.subplot(1,3,1), plt.imshow(img), plt.title("Original Image"), plt.axis("off")
+plt.subplot(1,3,2), plt.imshow(img_higher1), plt.title("Higher Contrast (1.1x)"), plt.axis("off")
+plt.subplot(1,3,3), plt.imshow(img_higher2), plt.title("Higher Contrast (1.2x)"), plt.axis("off")
+plt.show()
+```
+
+#### 20. Split the image (boy.jpg) into the B,G,R components & Display the channels.
+```python
+b, g, r = cv2.split(img)
+plt.figure(figsize=(10,5))
+plt.subplot(1,3,1), plt.imshow(b, cmap='gray'), plt.title("Blue Channel"), plt.axis("off")
+plt.subplot(1,3,2), plt.imshow(g, cmap='gray'), plt.title("Green Channel"), plt.axis("off")
+plt.subplot(1,3,3), plt.imshow(r, cmap='gray'), plt.title("Red Channel"), plt.axis("off")
+plt.show()
+```
+
+#### 21. Merged the R, G, B , displays along with the original image
+```python
+merged_rgb = cv2.merge([r, g, b])
+plt.figure(figsize=(5,5))
+plt.imshow(merged_rgb)
+plt.title("Merged RGB Image")
+plt.axis("off")
+plt.show()
+```
+
+#### 22. Split the image into the H, S, V components & Display the channels.
+```python
+hsv_img = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+h, s, v = cv2.split(hsv_img)
+plt.figure(figsize=(10,5))
+plt.subplot(1,3,1), plt.imshow(h, cmap='gray'), plt.title("Hue Channel"), plt.axis("off")
+plt.subplot(1,3,2), plt.imshow(s, cmap='gray'), plt.title("Saturation Channel"), plt.axis("off")
+plt.subplot(1,3,3), plt.imshow(v, cmap='gray'), plt.title("Value Channel"), plt.axis("off")
+plt.show()
+```
+#### 23. Merged the H, S, V, displays along with original image.
+```python
+merged_hsv = cv2.cvtColor(cv2.merge([h, s, v]), cv2.COLOR_HSV2RGB)
+combined = np.concatenate((img_rgb, merged_hsv), axis=1)
+plt.figure(figsize=(10, 5))
+plt.imshow(combined)
+plt.title("Original Image  &  Merged HSV Image")
+plt.axis("off")
+plt.show()
+```
+
+## Output:
+- ### **i)** Read and Display an Image.  
+   1.Read 'Eagle_in_Flight.jpg' as grayscale and display:
+
+  ![Screenshot 2025-03-04 133638](https://github.com/user-attachments/assets/df25661b-51ab-4dd4-b5b6-3db6a16109b4)
+
+
+  2.Save image as PNG and display:
+
+  ![Screenshot 2025-03-04 133649](https://github.com/user-attachments/assets/6500f2c0-bb51-4438-bb35-fb042bbd8254)
+
+
+  3.Cropped image:
+
+  ![image](https://github.com/user-attachments/assets/40c4f3d3-113c-45a3-8527-7ff6254f0f33)
+
+
+
+  4.Resize and flip Horizontally:
+
+  ![Screenshot 2025-03-04 171912](https://github.com/user-attachments/assets/2c9f65d5-070d-442c-bca1-717f71314527)
+
+
+  5.Read 'Apollo-11-launch.jpg' and  Display the final annotated image:
+![Screenshot 2025-03-04 172001](https://github.com/user-attachments/assets/26e0f9cc-05b8-4073-88ca-995a0240ff89)
+
+
+- ### **ii)** Adjust Image Brightness.
+
+1.Create brighter and darker images and display:
+
+![Screenshot 2025-03-04 172029](https://github.com/user-attachments/assets/3402b85c-62eb-4fa4-af6a-e3ab5eaddf7b)
+
+
+- ### **iii)** Modify Image Contrast.  
+1. Modify contrast using scaling factors 1.1 and 1.2:
+
+![Screenshot 2025-03-04 172106](https://github.com/user-attachments/assets/b93cd586-6b23-4a7e-9119-28fb17622c61)
+
+
+- ### **iv)** Generate Third Image Using Bitwise Operations.
+
+1.Split 'Boy.jpg' into B, G, R components and display:
+
+![Screenshot 2025-03-04 172139](https://github.com/user-attachments/assets/5f950096-4fb8-4e7f-b011-677abc051f8b)
+
+
+2.Merge the R, G, B channels and display:
+
+![Screenshot 2025-03-04 172216](https://github.com/user-attachments/assets/36c9fc76-db05-421a-8d9f-e72a11dc39b8)
+
+
+3.Split the image into H, S, V components and display:
+
+![Screenshot 2025-03-04 132423](https://github.com/user-attachments/assets/3d543f50-3507-4c9d-8f1e-27fcbf204c97)
+
+
+4.Merge the H, S, V channels and display:
+
+![Screenshot 2025-03-04 172320](https://github.com/user-attachments/assets/b88d67b0-5ab3-4fb3-ad7a-b00456b5e61b)
+
+
+## Result:
+Thus, the images were read, displayed, brightness and contrast adjustments were made, and bitwise operations were performed successfully using the Python program.
